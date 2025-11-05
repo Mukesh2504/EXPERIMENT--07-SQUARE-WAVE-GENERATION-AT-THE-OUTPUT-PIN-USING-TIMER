@@ -96,10 +96,13 @@ Step14. click on debug and simulate using simulation as shown below
   
 
 ## STM 32 CUBE PROGRAM :
-```c
+
+```
 #include "main.h"
 
+
 TIM_HandleTypeDef htim2;
+
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -107,23 +110,33 @@ static void MX_TIM2_Init(void);
 
 int main(void)
 {
+
   HAL_Init();
+
+
   SystemClock_Config();
+
+
   MX_GPIO_Init();
   MX_TIM2_Init();
+
   HAL_TIM_Base_Start(&htim2);
   HAL_TIM_PWM_Init(&htim2);
   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1);
 
   while (1)
   {
+
   }
+
 }
+
 
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
 
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
@@ -150,11 +163,16 @@ void SystemClock_Config(void)
   }
 }
 
+
 static void MX_TIM2_Init(void)
 {
+
+
+
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
+
 
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
@@ -182,70 +200,114 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 500;
+  sConfigOC.Pulse = 900;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
+
   HAL_TIM_MspPostInit(&htim2);
+
 }
+
 
 static void MX_GPIO_Init(void)
 {
+
+
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
 }
+
 
 void Error_Handler(void)
 {
+
   __disable_irq();
   while (1)
   {
   }
+
 }
 
 #ifdef  USE_FULL_ASSERT
+
 void assert_failed(uint8_t *file, uint32_t line)
 {
+
 }
 #endif
+
 ```
 
 
 
-
 ## Output screen shots of proteus  :
- <img width="1920" height="1080" alt="Screenshot 2025-10-15 094816" src="https://github.com/user-attachments/assets/08c19f0e-2919-4367-9a55-2e9dc383e075" />
-
  
+<img width="1263" height="881" alt="image" src="https://github.com/user-attachments/assets/062bdfab-1855-44a9-a309-5fb8a61bcbc0" />
+
  ## CIRCUIT DIAGRAM (EXPORT THE GRAPHICS TO PDF AND ADD THE SCREEN SHOT HERE): 
- <img width="908" height="727" alt="Screenshot 2025-10-15 094838" src="https://github.com/user-attachments/assets/3cfe740e-8a05-4064-8897-85263c35bc4b" />
+<img width="1219" height="847" alt="image" src="https://github.com/user-attachments/assets/dc13f667-941b-4a95-a1ce-a6c53109e85f" />
 
 
-## DUTY CYCLE AND FREQUENCY CALCULATION 
+## DUTY CYCLE AND FREQUENCY CALCULATION:
+
 FOR PULSE AT 500
-
-TON = 
-TOFF=
-TOTAL TIME = 
-FREQUENCY = 1/(TOTAL TIME)
-
+<img width="1748" height="861" alt="image" src="https://github.com/user-attachments/assets/c8ea55c2-6b77-4f8f-9daa-79bc280c9b1f" />
+```
+TON = 3 x 10 x 10^-6
+    = 0.00003
+TOFF=0.00003
+TOTAL TIME = TON + TOFF
+           = 0.00003+0.00003 
+           = 0.00006
+FREQUENCY = 1/(TOTAL TIME) 
+          =1/0.00006 
+          = 16666.7
+DUTY CYCLE = TON /(TON+TOFF)
+           = 0.00003/0.00006
+           = 0.5
+      IN % =0.5*100 
+           = 50 %
+ ```         
 FOR PULSE AT 700
-
-TON = 
-TOFF=
-TOTAL TIME = 
+<img width="1752" height="864" alt="image" src="https://github.com/user-attachments/assets/b2aaf94e-a080-467f-be34-740f5582ff5c" />
+```
+TON = 4 x 10 x 10^-6
+    = 0.00004
+TOFF= 2 x 10 x 10^-6
+    = 0.00002
+TOTAL TIME = TON + TOFF
+           = 0.00004+0.00002
+           = 0.00006
 FREQUENCY = 1/(TOTAL TIME)
-
-
+          = 16666.7
+DUTY CYCLE = TON /(TON+TOFF)
+           = 0.00004/0.00006
+           = 0.7
+      IN % =0.7*100 
+           = 70 %
+ ```          
 FOR PULSE AT 900
-
-TON = 
-TOFF=
-TOTAL TIME = 
+<img width="1763" height="850" alt="image" src="https://github.com/user-attachments/assets/e32c31e8-fd4d-4e16-9ce0-acf2d56cc8dd" />
+```
+TON = 1 x 50 x 10^-6
+    = 0.00005
+TOFF= 0.1 x 50 x 10^-6
+    = 0.000005
+TOTAL TIME = TON + TOFF
+           = 0.00005 + 0.000005
+           = 0.000055
 FREQUENCY = 1/(TOTAL TIME)
-
+          = 18181.82
+DUTY CYCLE = TON /(TON+TOFF)
+           = 0.00005/0.000055
+           = 0.9
+      IN % =0.9*100 
+           = 90 %
+```
 
 ## Result :
 A PWM Signal is generated using the following frequency and various duty cycles are simulated 
